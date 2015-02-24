@@ -10,15 +10,15 @@
 
 
     <ion-list>
-      <ion-item ng-repeat="opening in openings" class="item-thumbnail-left" href="#/app/searchone/{{$index}}">
+      <ion-item ng-repeat="movie in movies" class="item-thumbnail-left" href="#/app/detail/{{type}}/{{$index}}">
 
-          <img ng-src="{{opening.posters.thumbnail}}">
+          <img ng-src="{{movie.posters.thumbnail}}">
 
-        {{opening.title}}
+        {{movie.title}}
         ...
         {{searchterm}}
         ....{{$index}}...
-        {{opening.year}}
+        {{movie.year}}
 
 
       </ion-item>

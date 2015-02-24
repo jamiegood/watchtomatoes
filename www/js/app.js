@@ -50,30 +50,12 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       }
     }
   })  
-  .state('app.searchOne', {
-    url: "/searchone/:openingId",
-    views: {
-      'menuContent': {
-        templateUrl: "templates/searchone.html",
-        controller: 'SearchOneCtrl'        
-      }
-    }
-  })
    .state('app.in_theatres', {
      url: "/in_theaters",
      views: {
        'menuContent': {
-         templateUrl: "templates/in_theaters.html",
+         templateUrl: "templates/list.html",
           controller: 'InTheatersCtrl'        
-       }
-    }
-  })  
-   .state('app.in_theatre', {
-     url: "/in_theater/:openingId",
-     views: {
-       'menuContent': {
-          templateUrl: "templates/in_theater.html",
-          controller: 'InTheaterCtrl'        
        }
     }
   })  
@@ -82,39 +64,22 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     url: "/upcoming",
     views: {
       'menuContent': {
-        templateUrl: "templates/upcoming.html",
+        templateUrl: "templates/list.html",
         controller: 'UpcomingsCtrl'        
       }
     }
   })
-  .state('app.upcomingOne', {
-    url: "/upcoming/:openingId",
-    views: {
-      'menuContent': {
-        templateUrl: "templates/upcomingone.html",
-        controller: 'UpcomingCtrl'        
-      }
-    }
-  })  
+
     .state('app.openings', {
       url: "/openings",
       views: {
         'menuContent': {
-          templateUrl: "templates/openings.html",
+          templateUrl: "templates/list.html",
           controller: 'OpeningsCtrl'
         }
       }
     })
 
-  .state('app.opening', {
-      url: "/opening/:openingId",
-      views: {
-        'menuContent': {
-          templateUrl: "templates/opening.html",
-          controller: 'OpeningCtrl'
-        }
-      }
-    })
   .state('app.wanttowatch', {
       url: "/wanttowatch",
       views: {
@@ -125,7 +90,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       }
     })    
   .state('app.wanttowatchID', {
-      url: "/detail/:id",
+      url: "/detail/:type/:id",
       views: {
         'menuContent': {
           templateUrl: "templates/detail.html",

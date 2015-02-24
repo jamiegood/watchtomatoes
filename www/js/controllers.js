@@ -4,57 +4,49 @@ angular.module('starter.controllers', ['starter.services'])
 
 })
 
-.controller('OpeningsCtrl', function($scope, RottenAPI) {
+.controller('OpeningsCtrl', function($scope, RottenAPI, $ionicLoading) {
 
-  $scope.openings = '';
-  console.log(' In OpeningsCtrl');
+  $scope.movies = '';
+  $scope.type = 'openings';
 
-  RottenAPI.getMovies('openings').
+  $ionicLoading.show({template: 'Loading...'});
+
+  RottenAPI.getMovies($scope.type).
     success( function(data) {
-      console.log(data.movies);
-      $scope.openings = data.movies;
+      $ionicLoading.hide();
+      $scope.movies = data.movies;
     });
-
-
-
 })
 
 .controller('OpeningCtrl', function($scope, $stateParams, RottenAPI) {
 
-  var type = 'openings';
+  $scope.type = 'openings';
 
   var moviecache = RottenAPI.getCache(type);
+
   if(moviecache) {
-      $scope.opening = moviecache.movies[$stateParams.openingId];
+      $scope.movie = moviecache.movies[$stateParams.id];
   } else {
-    RottenAPI.getMovies(type).
+    RottenAPI.getMovies($scope.type).
       success( function(data) {
         console.log('This is data movies: ' + data.movies);
-        $scope.opening = data.movies[$stateParams.openingId];
+        $scope.movie = data.movies[$stateParams.id];
       });
   }
 
-  // console.log('stateparmas', $stateParams);
-  // console.log('stateparmas', $stateParams);
-//
-  //$scope.opening = $scope.openings[$stateParams.openingId];
-
-
 })
-.controller('UpcomingsCtrl', function($scope, RottenAPI) {
+.controller('UpcomingsCtrl', function($scope, RottenAPI, $ionicLoading) {
 
+  $scope.type = 'upcoming';
+  $ionicLoading.show({template: 'Loading...'});
+  $scope.movies = '';
 
-  $scope.openings = '';
-  console.log(' In UpcomingsCtrl');
-
-  RottenAPI.getMovies('upcoming').
+  RottenAPI.getMovies($scope.type).
     success( function(data) {
+      $ionicLoading.hide();
       console.log(data.movies);
-      $scope.openings = data.movies;
+      $scope.movies = data.movies;
     });
-
-
-
 })
 
 .controller('UpcomingCtrl', function($scope, $stateParams, RottenAPI) {
@@ -62,31 +54,35 @@ angular.module('starter.controllers', ['starter.services'])
   var type = 'upcoming';
   console.log(' THI IS NOT WORKING>>>>>>>>>In Upcoming    Ctrl');
   var moviecache = RottenAPI.getCache(type);
-  if(moviecache) {
-      console.log("THis is the index: " + $stateParams.openingId);
-      $scope.opening = moviecache.movies[$stateParams.openingId];
 
-      console.log($scope.opening);
+  if(moviecache) {
+      console.log("THis is the index: " + $stateParams.id);
+      $scope.movie = moviecache.movies[$stateParams.id];
+
+      console.log($scope.movie);
   } else {
     RottenAPI.getMovies(type).
       success( function(data) {
         console.log('This is data movies: ' + data.movies);
-        $scope.opening = data.movies[$stateParams.openingId];
+        $scope.movie = data.movies[$stateParams.id];
       });
   }
 
 })
 
-.controller('InTheatersCtrl', function($scope, RottenAPI) {
+.controller('InTheatersCtrl', function($scope, RottenAPI, $ionicLoading) {
 
 
-  $scope.openings = '';
-  console.log(' In in_theaters');
+  $scope.movies = '';
+  $scope.type = 'in_theaters';
 
-  RottenAPI.getMovies('in_theaters').
+  $ionicLoading.show({template: 'Loading...'});
+
+  RottenAPI.getMovies($scope.type).
     success( function(data) {
+      $ionicLoading.hide();
       console.log(data.movies);
-      $scope.openings = data.movies;
+      $scope.movies = data.movies;
     });
 
 
@@ -98,45 +94,42 @@ angular.module('starter.controllers', ['starter.services'])
   var type = 'in_theaters';
   console.log(' THI IS NOT WORKING>>>>>>>>>In in_theaters    Ctrl');
   var moviecache = RottenAPI.getCache(type);
-  if(moviecache) {
-      console.log("THis is the index: " + $stateParams.openingId);
-      $scope.opening = moviecache.movies[$stateParams.openingId];
 
-      console.log($scope.opening);
+  if(moviecache) {
+      console.log("THis is the index: " + $stateParams.id);
+      $scope.opening = moviecache.movies[$stateParams.id];
+
+      console.log($scope.movie);
+
   } else {
     RottenAPI.getMovies(type).
       success( function(data) {
         console.log('This is data movies: ' + data.movies);
-        $scope.opening = data.movies[$stateParams.openingId];
+        $scope.movie = data.movies[$stateParams.id];
       });
   }
 
 })
-.controller('SearchCtrl', function($scope, $stateParams, RottenAPI) {
+.controller('SearchCtrl', function($scope, $stateParams, RottenAPI, $ionicLoading) {
 
-  var type = 'search';
+  $scope.type = 'search';
   console.log(' >>>>>>>>>In SearchCtrl Ctrl');
   //var moviecache = RottenAPI.getCache(type);
 
-  $scope.openings = '';
+  $scope.movies = '';
   $scope.searchtermX = '';
 
-    console.log($scope.searchtermX);
-
-
   var doSearch = ionic.debounce(function(searchterm) {
+    $ionicLoading.show({template: 'Loading...'});
+
     RottenAPI.doSearch(searchterm).
       success( function(data) {
-        console.log('This is data search movies: ' + data.movies);
-        $scope.openings = data.movies;
+        $ionicLoading.hide();
+        $scope.movies = data.movies;
       });
   }, 500);
 
   $scope.search = function(searchtermX) {
-    console.log('search term START..');
-    console.log(searchtermX);
-    console.log("SCope here: ", $scope);
-    console.log('search term END...');
     doSearch(searchtermX);
   }
 
@@ -181,14 +174,9 @@ angular.module('starter.controllers', ['starter.services'])
 })
 .controller('DetailCtrl', function($scope, $localstorage, $stateParams, RottenAPI) {
 
-  console.log(' >>>>>>>In list ctrl    Ctrl');
+  var type = $stateParams.type;
+  console.log(type);
 
-  //get from local storage.
-  //var data = $localstorage.get('movie', 'default value');
-  // /$scope.openings = data.movies;
-
-
-  var type = 'in_theaters';
   console.log(' THI IS NOT WORKING>>>>>>>>>In Detail ctrl    Ctrl');
   var moviecache = RottenAPI.getCache(type);
 
@@ -215,7 +203,7 @@ angular.module('starter.controllers', ['starter.services'])
   var data = {}, localStorageKey = 'wanttowatch'; 
 
   var wanttowatch = 'movie' + Math.floor((Math.random() * 10) + 1);
-  WantToWatchService.add(localStorageKey, wanttowatch);
+  WantToWatchService.add(localStorageKey, JSON.stringify({blah:123}) );
   data.movies = WantToWatchService.list(localStorageKey);
   console.log(data.movies);
   $scope.menu = 'To Watch';

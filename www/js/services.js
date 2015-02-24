@@ -90,7 +90,7 @@ angular.module('starter.services', [])
       $window.localStorage[key] = JSON.stringify(value);
     },
     getObject: function(key) {
-      return JSON.parse($window.localStorage[key] || '{}');
+      return JSON.parse($window.localStorage[key] || '[{}]');
     }
   }
 }])
@@ -101,12 +101,13 @@ angular.module('starter.services', [])
   return {
     add: function(key, value) {
     	//get the local storage
-    	var separator = '|';
+    	var separator = ',';
     	console.log('localstorage: ', $localstorage.get(key, false));
+
     	if($localstorage.get(key, false) === false) {
     		separator = '';
     	}
-    	$localstorage.set(key, $localstorage.get(key, '') + separator + value);
+    	$localstorage.set(key, $localstorage.get(key, '') + separator + JSON.stringify(value));
 
     },
     remove: function(key, defaultValue) {
@@ -114,7 +115,7 @@ angular.module('starter.services', [])
     },
     list: function(key) {
       var list = $localstorage.get(key, '');
-      var list_array = list.split('|');
+      var list_array = JSON.parse("["+list+"]");
       return list_array;
       //explose on separator and return as array
 
