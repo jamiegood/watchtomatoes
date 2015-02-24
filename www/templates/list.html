@@ -1,0 +1,16 @@
+<ion-view view-title="{{menu}}">
+  <ion-content>
+    <ion-list>
+      <ion-item ng-repeat="movie in movies" class="item-thumbnail-left" href="#/app/detail/{{$index}}">
+
+          <img ng-src="{{movie.posters.thumbnail}}">
+
+        {{movie.title}}
+				....{{$index}}...
+        {{movie.year}}
+
+
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

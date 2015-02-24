@@ -1,0 +1,29 @@
+<ion-view view-title="Search">
+  <ion-content>
+		<div class="list list-inset">
+		  <label class="item item-input">
+		    <i class="icon ion-search placeholder-icon"></i>
+		    <input type="text" placeholder="Search" ng-model="searchtermX" ng-change="search(searchtermX)">
+		  </label>
+		</div>
+
+
+
+    <ion-list>
+      <ion-item ng-repeat="opening in openings" class="item-thumbnail-left" href="#/app/searchone/{{$index}}">
+
+          <img ng-src="{{opening.posters.thumbnail}}">
+
+        {{opening.title}}
+        ...
+        {{searchterm}}
+        ....{{$index}}...
+        {{opening.year}}
+
+
+      </ion-item>
+    </ion-list>
+
+
+  </ion-content>
+</ion-view>
