@@ -8,6 +8,7 @@ angular.module('starter.controllers', ['starter.services'])
 
   $scope.movies = '';
   $scope.type = 'openings';
+  $scope.menu = 'Openings';  
 
   $ionicLoading.show({template: 'Loading...'});
 
@@ -21,6 +22,9 @@ angular.module('starter.controllers', ['starter.services'])
 .controller('OpeningCtrl', function($scope, $stateParams, RottenAPI) {
 
   $scope.type = 'openings';
+  $scope.menu = 'Openings';
+
+
 
   var moviecache = RottenAPI.getCache(type);
 
@@ -38,6 +42,8 @@ angular.module('starter.controllers', ['starter.services'])
 .controller('UpcomingsCtrl', function($scope, RottenAPI, $ionicLoading) {
 
   $scope.type = 'upcoming';
+  $scope.menu = 'Up Coming';
+
   $ionicLoading.show({template: 'Loading...'});
   $scope.movies = '';
 
@@ -52,6 +58,8 @@ angular.module('starter.controllers', ['starter.services'])
 .controller('UpcomingCtrl', function($scope, $stateParams, RottenAPI) {
 
   var type = 'upcoming';
+  $scope.menu = 'Up Coming';
+
   console.log(' THI IS NOT WORKING>>>>>>>>>In Upcoming    Ctrl');
   var moviecache = RottenAPI.getCache(type);
 
@@ -75,6 +83,7 @@ angular.module('starter.controllers', ['starter.services'])
 
   $scope.movies = '';
   $scope.type = 'in_theaters';
+  $scope.menu = 'Cinema';
 
   $ionicLoading.show({template: 'Loading...'});
 
