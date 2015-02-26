@@ -1,13 +1,16 @@
 <ion-view view-title="{{menu}}">
   <ion-content>
-    <ion-list>
-      <ion-item ng-repeat="movie in movies" class="item-thumbnail-left" href="#/app/detail/{{type}}/{{$index}}">
+    <ion-list show-delete="shouldShowDelete">
+      <ion-item ng-repeat="movie in movies track by $index" class="item-thumbnail-left" href="#/app/detail/{{type}}/{{$index}}">
 
-          <img ng-src="{{movie.posters.thumbnail}}">
+          <img img-preload class="full-image fade" ng-src="{{movie.posters.thumbnail}}">
 
+    
         {{movie.title}}
 				....{{$index}}...
         {{movie.year}}
+    <ion-delete-button class="ion-minus-circled"></ion-delete-button>
+    Hello, list item!
 
 
       </ion-item>

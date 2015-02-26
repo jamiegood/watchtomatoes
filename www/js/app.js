@@ -27,7 +27,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   openings: 'lists/movies/opening.json',
   upcoming: 'lists/movies/upcoming.json',
   in_theaters: 'lists/movies/in_theaters.json',
-  search: 'movies.json'
+  search: 'movies.json',
+  largeImgURL: 'http://content6.flixster.com/movie/'
 })
 
 

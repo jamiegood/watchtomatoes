@@ -11,7 +11,9 @@
     </div>
 
     <div class="item item-body">
-      <img class="full-image" src="{{movie.posters.thumbnail}}">
+      <img img-preload class="full-image fade" ng-src="{{movie.largeImage}}">
+
+     <!-- <img img-preload class="fade" ng-src="{{imgSrc}}"> -->
       <p>
       {{movie.synopsis}}
       </p>
