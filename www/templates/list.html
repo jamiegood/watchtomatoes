@@ -1,4 +1,5 @@
 <ion-view view-title="{{menu}}">
+
   <ion-content>
     <ion-list show-delete="shouldShowDelete">
       <ion-item ng-repeat="movie in movies track by $index" class="item-thumbnail-left" href="#/app/detail/{{type}}/{{$index}}">
@@ -9,11 +10,18 @@
         {{movie.title}}
 				....{{$index}}...
         {{movie.year}}
-    <ion-delete-button class="ion-minus-circled"></ion-delete-button>
-    Hello, list item!
-
+        <ion-delete-button class="ion-minus-circled" ng-click=""></ion-delete-button>
+            
+        <ion-option-button class="button-negative"
+                           ng-click="delete($index)">
+          Delete
+        </ion-option-button>        
+        Hello, list item!
 
       </ion-item>
     </ion-list>
   </ion-content>
 </ion-view>
+
+
+

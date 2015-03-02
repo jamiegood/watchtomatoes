@@ -98,10 +98,12 @@ angular.module('starter.services', [])
 .factory('WantToWatchService', ['$window', '$localstorage', function($window, $localstorage) {
 
 
+  var separator = '|';
+
   return {
     add: function(key, value) {
     	//get the local storage
-    	var separator = '|';
+    	//var separator = '|';
     	console.log('localstorage: ', $localstorage.get(key, false));
 
     	if($localstorage.get(key, false) === false) {
@@ -116,17 +118,32 @@ angular.module('starter.services', [])
     getObject: function(key) {
       return $localstorage.getObject(key);
     },
-    remove: function(key, defaultValue) {
-      return $window.localStorage[key] || defaultValue;
+    remove: function(key, index) {
+      console.log('Will remove pos %a from %b', index, key);
+      
+      var list = $localstorage.get(key, '');
+      var list_array = list.split(separator);
+      list_array.splice(index, 1);
+      //SAVE BACK to local storage
+
+      $localstorage.set(key,list_array.join(separator));
+
+      //return $window.localStorage[key] || defaultValue;
     },
     list: function(key) {
       var list = $localstorage.get(key, '');
       // explode to an array
-
-      var list_array = list.split("|");
+      console.log(list);
+      var list_array =[];
+      
+      if(list !== '') {
+        list_array = list.split("|");
+      } 
       var i;
 
       console.log(list_array.length);
+      console.log(list_array);
+
 
       for(i =0; i <list_array.length; i ++) {
         //console.log(JSON.parse(list_array[i]));

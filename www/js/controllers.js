@@ -212,19 +212,28 @@ angular.module('starter.controllers', ['starter.services'])
 .controller('WantToWatchCtrl', function($scope, WantToWatchService, $stateParams, RottenAPI) {
 
   console.log(' >>>>>>>In WantToWatch ctrl    Ctrl');
-  $scope.shouldShowDelete = true;
+  $scope.shouldShowDelete = false;
   //get from local storage.
   var data = {}, localStorageKey = 'wanttowatch'; 
 
   var wanttowatch = 'movie' + Math.floor((Math.random() * 100) + 1);
   var obj = {title:wanttowatch, synopsis: "synopsis", year:'2005'};
   //obj_array.push(obj);
-  WantToWatchService.add(localStorageKey, obj);
+  //WantToWatchService.add(localStorageKey, obj);
   data.movies = WantToWatchService.list(localStorageKey);
   console.log(data.movies);
   $scope.menu = 'To Watch';
   console.log(data.movies);
   $scope.movies = data.movies;
+
+  $scope.delete = function(index) {
+      console.log(localStorageKey);
+
+    WantToWatchService.remove(localStorageKey, index);
+    console.log
+      $scope.movies  = WantToWatchService.list(localStorageKey);
+
+  }
 
 
 })
