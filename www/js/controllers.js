@@ -219,7 +219,7 @@ angular.module('starter.controllers', ['starter.services'])
   var wanttowatch = 'movie' + Math.floor((Math.random() * 100) + 1);
   var obj = {title:wanttowatch, synopsis: "synopsis", year:'2005'};
   //obj_array.push(obj);
-  //WantToWatchService.add(localStorageKey, obj);
+  WantToWatchService.add(localStorageKey, obj);
   data.movies = WantToWatchService.list(localStorageKey);
   console.log(data.movies);
   $scope.menu = 'To Watch';
@@ -236,29 +236,7 @@ angular.module('starter.controllers', ['starter.services'])
   }
 
 
-})
-.directive('imgPreload', ['$rootScope', function($rootScope) {
-    return {
-      restrict: 'A',
-      scope: {
-        ngSrc: '@'
-      },
-      link: function(scope, element, attrs) {
-        element.on('load', function() {
-
-          console.log('IMAGE LOADED - ADD CLASS IN');
-          element.addClass('in');
-        }).on('error', function() {
-          //
-        });
-
-        scope.$watch('ngSrc', function(newVal) {
-          element.removeClass('in');
-                    console.log('IMAGE listed - REMOVE CLASS IN');
-        });
-      }
-    };
-}]);
+});
 
 
 
