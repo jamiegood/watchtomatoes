@@ -1,6 +1,85 @@
 angular.module('starter.controllers', ['starter.services'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $window) {
+  // Form data for the login modal
+  $scope.loginData = {};
+
+  // Create the login modal that we will use later
+  $ionicModal.fromTemplateUrl('templates/login.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  // Create the login modal that we will use later
+  $ionicModal.fromTemplateUrl('templates/logOut.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal2 = modal;
+  });
+
+  // Triggered in the login modal to close it
+  $scope.closeLogin = function() {
+    $scope.modal.hide();
+  };  
+
+  // Triggered in the login modal to close it
+  $scope.closeLogOut = function() {
+        $window.location.reload();
+
+    $scope.modal2.hide();
+  };
+
+  // Open the login modal
+  $scope.login = function() {
+    $scope.modal.show();
+  };  
+
+  // Open the login modal
+  $scope.logOut = function() {
+    $scope.modal2.show();
+  };
+
+  // Perform the login action when the user submits the login form
+  $scope.doLogin = function() {
+    console.log('Doing login', $scope.loginData);
+
+    // Simulate a login delay. Remove this and replace with your login
+    // code if using a login system
+    $timeout(function() {
+      $scope.closeLogin();
+    }, 1000);
+  };
+
+
+
+  $scope.fbLogin = function() {
+
+  $scope.loginState = false;
+
+    openFB.login(
+        function(response) {
+            if (response.status === 'connected') {
+                console.log('Facebook login succeeded');
+                $scope.loginState = true;
+
+                $scope.closeLogin();
+            } else {
+                alert('Facebook login failed');
+            }
+        },
+        {scope: 'email,publish_actions'});
+  };
+
+  $scope.fbLogOut = function() {
+
+  //$scope.loginState = false;
+
+    openFB.logout( function(){
+      $window.location.reload();
+
+    });
+  };
 
 })
 
@@ -209,12 +288,12 @@ angular.module('starter.controllers', ['starter.services'])
 
 
 })
-.controller('WantToWatchCtrl', function($scope, WantToWatchService, $stateParams, RottenAPI) {
+.controller('WantToWatchCtrl', function($scope, WantToWatchService, $stateParams, RottenAPI, config) {
 
   console.log(' >>>>>>>In WantToWatch ctrl    Ctrl');
   $scope.shouldShowDelete = false;
   //get from local storage.
-  var data = {}, localStorageKey = 'wanttowatch'; 
+  var data = {}, localStorageKey = config.localStorageKey;
 
   var wanttowatch = 'movie' + Math.floor((Math.random() * 100) + 1);
   var obj = {title:wanttowatch, synopsis: "synopsis", year:'2005'};
@@ -230,12 +309,65 @@ angular.module('starter.controllers', ['starter.services'])
       console.log(localStorageKey);
 
     WantToWatchService.remove(localStorageKey, index);
-    console.log
+    //console.log
       $scope.movies  = WantToWatchService.list(localStorageKey);
 
   }
 
 
+})
+.controller('SaveDetailCtrl', function($scope, $localstorage, $stateParams, WantToWatchService, config) {
+
+  var id = $stateParams.id;
+  console.log(id);
+  var movie = {};
+  console.log(' THI IS NOT WORKING>>>>>>>>>In Detail ctrl    Ctrl');
+  $scope.movie = WantToWatchService.find(config.localStorageKey, id);
+
+  console.log($scope.movie);
+
+  // if(moviecache) {
+  //     console.log("THis is the index: " + $stateParams.id);
+  //     movie = moviecache.movies[$stateParams.id];
+  //     movie.largeImage = config.largeImgURL + movie.posters.original.split('movie/')[1];
+  //     $scope.movie = movie;
+  //     console.log($scope.movie);
+  // } else {
+  //   RottenAPI.getMovies(type).
+  //     success( function(data) {
+  //       console.log('This is data movies: ' + data.movies);
+  //       movie = data.movies[$stateParams.id];
+  //       movie.largeImage = config.largeImgURL + movie.posters.original.split('movie/')[1];
+  //       //transform to a larger image
+  //       $scope.movie = movie;
+  //       console.log($scope.movie);
+  //     });
+  // }
+
+
+})
+
+.controller('ProfileCtrl', function($scope, $window) {
+
+    //check if logged in?
+    if($scope.loginState == false) {
+      $window.location ="/";
+    }
+
+    openFB.api({
+        path: '/me',
+        params: {fields: 'id,name'},
+        success: function(user) {
+            $scope.$apply(function() {
+                $scope.user = user;
+                $scope.loginState = true;
+
+            });
+        },
+        error: function(error) {
+            alert('Facebook error: ' + error.error_description);
+        }
+    });
 });
 
 

@@ -28,12 +28,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives']
   upcoming: 'lists/movies/upcoming.json',
   in_theaters: 'lists/movies/in_theaters.json',
   search: 'movies.json',
-  largeImgURL: 'http://content6.flixster.com/movie/'
+  largeImgURL: 'http://content6.flixster.com/movie/',
+  localStorageKey: 'wanttowatch'
 })
 
 
 // Routes
 .config(function($stateProvider, $urlRouterProvider) {
+
+  openFB.init({appId: '383284458515356'});
+
   $stateProvider
 
   .state('app', {
@@ -85,12 +89,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives']
       url: "/wanttowatch",
       views: {
         'menuContent': {
-          templateUrl: "templates/list.html",
+          templateUrl: "templates/save-list.html",
           controller: 'WantToWatchCtrl'
         }
       }
     })    
-  .state('app.wanttowatchID', {
+    .state('app.wanttowatchID', {
+      url: "/detail/wanttowatch/:id",
+      views: {
+        'menuContent': {
+          templateUrl: "templates/save-detail.html",
+          controller: 'SaveDetailCtrl'
+        }
+      }   
+    })
+  .state('app.detail', {
       url: "/detail/:type/:id",
       views: {
         'menuContent': {
@@ -98,8 +111,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives']
           controller: 'DetailCtrl'
         }
       }   
-    });
+    })
 
+.state('app.profile', {
+  url: "/profile",
+  views: {
+      'menuContent' :{
+          templateUrl: "templates/profile.html",
+          controller: "ProfileCtrl"
+      }
+  }
+});
 
  // });
 

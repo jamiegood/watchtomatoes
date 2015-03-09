@@ -1,4 +1,4 @@
-angular.module('starter.services', [])
+  angular.module('starter.services', [])
 .factory('RottenAPI', function ($http, APIProvider) {
 
     //var urlBase = '/mocks/upcoming.json?apikey='+apikey+'&page_limit=1&callback=JSON_CALLBACK';
@@ -155,6 +155,14 @@ angular.module('starter.services', [])
       console.log(list_array);
       return list_array;
       //explose on separator and return as array
+
+    }, 
+    find: function(key, id) {
+      console.log('Im looking for something %s', id);
+      var metest = this.list(key);
+      console.log('----- metest here');
+      console.log(metest[id]);
+      return metest[id];
 
     }
   }
