@@ -7,7 +7,7 @@
 
     dataFactory.getCache = function(type) {
     		if(movieCache[type]) {
-    			console.log('this is the cache: ' + JSON.stringify(movieCache[type]));
+    		//	console.log('this is the cache: ' + JSON.stringify(movieCache[type]));
     			return movieCache[type];
     		} else {
     			return false;
@@ -23,12 +23,12 @@
 					    // this callback will be called asynchronously
 					    // when the response is available
 					    movieCache[type] = data;
-					    console.log('yes', data);
+					   // console.log('yes', data);
 					  }).
 					  error(function(data, status, headers, config) {
 					    // called asynchronously if an error occurs
 					    // or server returns response with an error status.
-							console.log('OOOOpps', data);
+						//	console.log('OOOOpps', data);
 
 					  });        
 
@@ -99,12 +99,13 @@
 
 
   var separator = '|';
+  var list_array =[];
 
   return {
     add: function(key, value) {
     	//get the local storage
     	//var separator = '|';
-    	console.log('localstorage: ', $localstorage.get(key, false));
+    //	console.log('localstorage: ', $localstorage.get(key, false));
 
     	if($localstorage.get(key, false) === false) {
     		separator = '';
@@ -119,7 +120,7 @@
       return $localstorage.getObject(key);
     },
     remove: function(key, index) {
-      console.log('Will remove pos %a from %b', index, key);
+      //console.log('Will remove pos %a from %b', index, key);
       
       var list = $localstorage.get(key, '');
       var list_array = list.split(separator);
@@ -133,35 +134,40 @@
     list: function(key) {
       var list = $localstorage.get(key, '');
       // explode to an array
-      console.log(list);
-      var list_array =[];
+     // console.log(list);
+      //var list_array =[];
       
       if(list !== '') {
         list_array = list.split("|");
       } 
       var i;
 
-      console.log(list_array.length);
-      console.log(list_array);
+     //  console.log('List array length: ' + list_array.length);
+     //  console.log(list_array);
 
 
-      for(i =0; i <list_array.length; i ++) {
-        //console.log(JSON.parse(list_array[i]));
+      for(i =0; i <list_array.length; i++) {
+        console.log(i);
         //var example = "'" + list_array[i] + "'";
         var example = list_array[i];
+      //  console.log(example);
         list_array[i] = JSON.parse(example);
+        //list_array[i] = example;
       }
-      console.log('this is sthe list array');
-      console.log(list_array);
+     // console.log('this is sthe list array');
+      //console.log(list_array);
       return list_array;
       //explose on separator and return as array
 
     }, 
+    getStore: function() {
+      return list_array;
+    },
     find: function(key, id) {
-      console.log('Im looking for something %s', id);
+      //console.log('Im looking for something %s', id);
       var metest = this.list(key);
-      console.log('----- metest here');
-      console.log(metest[id]);
+      //console.log('----- metest here');
+      //console.log(metest[id]);
       return metest[id];
 
     }

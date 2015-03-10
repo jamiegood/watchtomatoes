@@ -123,6 +123,8 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.type = 'upcoming';
   $scope.menu = 'Up Coming';
 
+  console.log(' >>>>>>>>>In Upcomings    Ctrl');
+
   $ionicLoading.show({template: 'Loading...'});
   $scope.movies = '';
 
@@ -260,7 +262,7 @@ angular.module('starter.controllers', ['starter.services'])
 
 
 })
-.controller('DetailCtrl', function($scope, $localstorage, $stateParams, RottenAPI, config) {
+.controller('DetailCtrl', function($scope, $localstorage, $stateParams, RottenAPI, config, WantToWatchService) {
 
   var type = $stateParams.type;
   console.log(type);
@@ -286,6 +288,20 @@ angular.module('starter.controllers', ['starter.services'])
       });
   }
 
+  $scope.save = function(movie) {
+    console.log('I clicked on save %s', movie);
+    console.log(movie);
+    // add to WantToWatchService
+    console.log(movie);
+    console.log(config.localStorageKey);
+    WantToWatchService.add(config.localStorageKey, movie);
+  }  
+
+  $scope.remove = function() {
+    console.log('I clicked on remove %s', id);
+    console.log($stateParams.id);
+    
+  }
 
 })
 .controller('WantToWatchCtrl', function($scope, WantToWatchService, $stateParams, RottenAPI, config) {
@@ -295,18 +311,20 @@ angular.module('starter.controllers', ['starter.services'])
   //get from local storage.
   var data = {}, localStorageKey = config.localStorageKey;
 
-  var wanttowatch = 'movie' + Math.floor((Math.random() * 100) + 1);
-  var obj = {title:wanttowatch, synopsis: "synopsis", year:'2005'};
-  //obj_array.push(obj);
-  WantToWatchService.add(localStorageKey, obj);
-  data.movies = WantToWatchService.list(localStorageKey);
-  console.log(data.movies);
+ // data.movies = WantToWatchService.list(localStorageKey);
+  //console.log(data.movies);
   $scope.menu = 'To Watch';
-  console.log(data.movies);
-  $scope.movies = data.movies;
+  //console.log(data.movies);
+  $scope.movies = WantToWatchService.list(localStorageKey);
 
+  var test = WantToWatchService.getStore();
+   $scope.$watch('test', function() {
+         console.log('hey, myVar has changed!');
+         $scope.movies  = WantToWatchService.list(config.localStorageKey);   
+     });
+   
   $scope.delete = function(index) {
-      console.log(localStorageKey);
+    //  console.log(localStorageKey);
 
     WantToWatchService.remove(localStorageKey, index);
     //console.log
@@ -316,33 +334,29 @@ angular.module('starter.controllers', ['starter.services'])
 
 
 })
-.controller('SaveDetailCtrl', function($scope, $localstorage, $stateParams, WantToWatchService, config) {
+.controller('SaveDetailCtrl', function($scope, $localstorage, $stateParams, WantToWatchService, config, $location) {
 
   var id = $stateParams.id;
   console.log(id);
   var movie = {};
   console.log(' THI IS NOT WORKING>>>>>>>>>In Detail ctrl    Ctrl');
   $scope.movie = WantToWatchService.find(config.localStorageKey, id);
-
+  $scope.index = $stateParams.id;
   console.log($scope.movie);
 
-  // if(moviecache) {
-  //     console.log("THis is the index: " + $stateParams.id);
-  //     movie = moviecache.movies[$stateParams.id];
-  //     movie.largeImage = config.largeImgURL + movie.posters.original.split('movie/')[1];
-  //     $scope.movie = movie;
-  //     console.log($scope.movie);
-  // } else {
-  //   RottenAPI.getMovies(type).
-  //     success( function(data) {
-  //       console.log('This is data movies: ' + data.movies);
-  //       movie = data.movies[$stateParams.id];
-  //       movie.largeImage = config.largeImgURL + movie.posters.original.split('movie/')[1];
-  //       //transform to a larger image
-  //       $scope.movie = movie;
-  //       console.log($scope.movie);
-  //     });
-  // }
+   $scope.$watch($scope.movies, function() {
+         console.log('hey, myVar has changed!');
+         $scope.movies  = WantToWatchService.list(config.localStorageKey);   
+     });
+
+  $scope.remove = function() {
+    console.log('I clicked on remove %s', id);
+    console.log($stateParams.id);
+    WantToWatchService.remove(config.localStorageKey, $scope.index);
+    //console.log
+      $scope.movies  = WantToWatchService.list(config.localStorageKey);   
+      $location.path('/app/wanttowatch'); 
+  }
 
 
 })

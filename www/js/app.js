@@ -87,6 +87,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives']
 
   .state('app.wanttowatch', {
       url: "/wanttowatch",
+      cache: false,
       views: {
         'menuContent': {
           templateUrl: "templates/save-list.html",
