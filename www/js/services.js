@@ -59,9 +59,12 @@
 
 	var obj = {};
 	var apiurl = '';
+  var limit = 2
+  var page = 1;
 
-	obj.getAPIFor = function(type) {
-		apiurl = config.baseUrl + config[type]+ '?apikey='+config.apikey+'&page_limit=10&callback=JSON_CALLBACK';
+	obj.getAPIFor = function(type, page) {
+		apiurl = config.baseUrl + config[type]+ '?apikey='+config.apikey+'&page='+page+'&page_limit='+limit+'&callback=JSON_CALLBACK';
+
 		console.log('MAKE THIS CALL for: ' + apiurl);
   	return apiurl;
 	}
@@ -69,7 +72,7 @@
 	var type = 'search';
 
 	obj.doSearch = function(term) {
-		apiurl = config.baseUrl + config[type]+ '?apikey='+config.apikey+'&page_limit=10&q='+term+'&callback=JSON_CALLBACK';
+		apiurl = config.baseUrl + config[type]+ '?apikey='+config.apikey+'&page_limit='+limit+'&q='+term+'&callback=JSON_CALLBACK';
 		console.log('MAKE THIS CALL for: ' + apiurl);
   	return apiurl;		
 	}
@@ -104,13 +107,13 @@
   return {
     add: function(key, value) {
     	//get the local storage
-    	//var separator = '|';
+    	var separatorAdd = separator;
     //	console.log('localstorage: ', $localstorage.get(key, false));
 
     	if($localstorage.get(key, false) === false) {
-    		separator = '';
+    		separatorAdd = '';
     	}
-    	$localstorage.set(key, $localstorage.get(key, '') + separator + JSON.stringify(value));
+    	$localstorage.set(key, $localstorage.get(key, '') + separatorAdd + JSON.stringify(value));
 
     },
     setObject: function(key, value) {
@@ -121,9 +124,12 @@
     },
     remove: function(key, index) {
       //console.log('Will remove pos %a from %b', index, key);
-      
+      console.log('Sepearate %s', separator);
       var list = $localstorage.get(key, '');
+      console.log(list)
+
       var list_array = list.split(separator);
+      console.log(list_array);
       list_array.splice(index, 1);
       //SAVE BACK to local storage
 
@@ -134,11 +140,12 @@
     list: function(key) {
       var list = $localstorage.get(key, '');
       // explode to an array
-     // console.log(list);
-      //var list_array =[];
+      console.log(" this is list %s", list);
+      var list_array =[];
       
       if(list !== '') {
         list_array = list.split("|");
+        console.log("list not enough to space");
       } 
       var i;
 
@@ -155,7 +162,7 @@
         //list_array[i] = example;
       }
      // console.log('this is sthe list array');
-      //console.log(list_array);
+      console.log(list_array);
       return list_array;
       //explose on separator and return as array
 

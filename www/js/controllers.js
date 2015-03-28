@@ -25,7 +25,7 @@ angular.module('starter.controllers', ['starter.services'])
 
   // Triggered in the login modal to close it
   $scope.closeLogOut = function() {
-        $window.location.reload();
+    $window.location.reload();
 
     $scope.modal2.hide();
   };
@@ -96,6 +96,10 @@ angular.module('starter.controllers', ['starter.services'])
       $ionicLoading.hide();
       $scope.movies = data.movies;
     });
+
+  $scope.loadMore = function() {
+    console.log('...load more...');
+  }
 })
 
 .controller('OpeningCtrl', function($scope, $stateParams, RottenAPI) {
@@ -262,7 +266,7 @@ angular.module('starter.controllers', ['starter.services'])
 
 
 })
-.controller('DetailCtrl', function($scope, $localstorage, $stateParams, RottenAPI, config, WantToWatchService) {
+.controller('DetailCtrl', function($scope, $localstorage, $stateParams, RottenAPI, config, WantToWatchService, $ionicLoading) {
 
   var type = $stateParams.type;
   console.log(type);
@@ -295,16 +299,20 @@ angular.module('starter.controllers', ['starter.services'])
     console.log(movie);
     console.log(config.localStorageKey);
     WantToWatchService.add(config.localStorageKey, movie);
+    $ionicLoading.show({ template: 'Item saved!', noBackdrop: true, duration: 2000 });
+
   }  
 
   $scope.remove = function() {
     console.log('I clicked on remove %s', id);
+    $ionicLoading.show({ template: 'Item removed!', noBackdrop: true, duration: 1000 });
+
     console.log($stateParams.id);
     
   }
 
 })
-.controller('WantToWatchCtrl', function($scope, WantToWatchService, $stateParams, RottenAPI, config) {
+.controller('WantToWatchCtrl', function($scope, WantToWatchService, $stateParams, RottenAPI, config, $ionicLoading) {
 
   console.log(' >>>>>>>In WantToWatch ctrl    Ctrl');
   $scope.shouldShowDelete = false;
@@ -317,24 +325,26 @@ angular.module('starter.controllers', ['starter.services'])
   //console.log(data.movies);
   $scope.movies = WantToWatchService.list(localStorageKey);
 
-  var test = WantToWatchService.getStore();
-   $scope.$watch('test', function() {
-         console.log('hey, myVar has changed!');
-         $scope.movies  = WantToWatchService.list(config.localStorageKey);   
-     });
+  // var test = WantToWatchService.getStore();
+  //  $scope.$watch('test', function() {
+  //        console.log('hey, myVar has changed!');
+  //        $scope.movies  = WantToWatchService.list(config.localStorageKey);   
+  //    });
    
   $scope.delete = function(index) {
-    //  console.log(localStorageKey);
+     console.log(localStorageKey + " :: " + index);
 
     WantToWatchService.remove(localStorageKey, index);
     //console.log
       $scope.movies  = WantToWatchService.list(localStorageKey);
+          $ionicLoading.show({ template: 'Item removed!', noBackdrop: true, duration: 1000 });
+
 
   }
 
 
 })
-.controller('SaveDetailCtrl', function($scope, $localstorage, $stateParams, WantToWatchService, config, $location) {
+.controller('SaveDetailCtrl', function($scope, $localstorage, $stateParams, WantToWatchService, config, $location, $ionicLoading) {
 
   var id = $stateParams.id;
   console.log(id);
@@ -356,6 +366,8 @@ angular.module('starter.controllers', ['starter.services'])
     //console.log
       $scope.movies  = WantToWatchService.list(config.localStorageKey);   
       $location.path('/app/wanttowatch'); 
+      $ionicLoading.show({ template: 'Item removed!', noBackdrop: true, duration: 1000 });
+
   }
 
 
