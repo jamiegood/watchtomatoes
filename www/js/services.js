@@ -14,15 +14,20 @@
     		}
     }
 
-    dataFactory.getMovies = function (type) {
+    dataFactory.getMovies = function (type, page) {
 
-	    		var apiurl = APIProvider.getAPIFor(type);
-	    	
+	    		var apiurl = APIProvider.getAPIFor(type, page);
+	    	  console.log(apiurl);
+
 	        return $http.jsonp(apiurl).
 					  success(function(data, status, headers, config) {
 					    // this callback will be called asynchronously
 					    // when the response is available
-					    movieCache[type] = data;
+					    if (movieCache[type]) {
+                movieCache[type] = movieCache[type].concat(data);
+              } else {
+                movieCache[type] = data;                
+              }
 					   // console.log('yes', data);
 					  }).
 					  error(function(data, status, headers, config) {
@@ -43,7 +48,7 @@
 					    // this callback will be called asynchronously
 					    // when the response is available
 					    movieCache['search'] = data;
-					    console.log('yes', data);
+					   // console.log('yes', data);
 					  }).
 					  error(function(data, status, headers, config) {
 					    // called asynchronously if an error occurs
@@ -59,13 +64,14 @@
 
 	var obj = {};
 	var apiurl = '';
-  var limit = 2
-  var page = 1;
+  var limit = 10
+  var initial_page = 1;
 
 	obj.getAPIFor = function(type, page) {
+    if(!page) page = initial_page;
 		apiurl = config.baseUrl + config[type]+ '?apikey='+config.apikey+'&page='+page+'&page_limit='+limit+'&callback=JSON_CALLBACK';
 
-		console.log('MAKE THIS CALL for: ' + apiurl);
+		//console.log('MAKE THIS CALL for: ' + apiurl);
   	return apiurl;
 	}
 
@@ -73,7 +79,7 @@
 
 	obj.doSearch = function(term) {
 		apiurl = config.baseUrl + config[type]+ '?apikey='+config.apikey+'&page_limit='+limit+'&q='+term+'&callback=JSON_CALLBACK';
-		console.log('MAKE THIS CALL for: ' + apiurl);
+		//console.log('MAKE THIS CALL for: ' + apiurl);
   	return apiurl;		
 	}
 
@@ -124,12 +130,12 @@
     },
     remove: function(key, index) {
       //console.log('Will remove pos %a from %b', index, key);
-      console.log('Sepearate %s', separator);
+      //console.log('Sepearate %s', separator);
       var list = $localstorage.get(key, '');
-      console.log(list)
+      //console.log(list)
 
       var list_array = list.split(separator);
-      console.log(list_array);
+      //console.log(list_array);
       list_array.splice(index, 1);
       //SAVE BACK to local storage
 
@@ -140,7 +146,7 @@
     list: function(key) {
       var list = $localstorage.get(key, '');
       // explode to an array
-      console.log(" this is list %s", list);
+     // console.log(" this is list %s", list);
       var list_array =[];
       
       if(list !== '') {

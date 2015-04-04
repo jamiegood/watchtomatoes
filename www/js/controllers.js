@@ -130,14 +130,34 @@ angular.module('starter.controllers', ['starter.services'])
   console.log(' >>>>>>>>>In Upcomings    Ctrl');
 
   $ionicLoading.show({template: 'Loading...'});
-  $scope.movies = '';
+  $scope.movies = [];
 
-  RottenAPI.getMovies($scope.type).
-    success( function(data) {
-      $ionicLoading.hide();
-      console.log(data.movies);
-      $scope.movies = data.movies;
-    });
+  var initial_page = 1;
+            $scope.$broadcast('scroll.infiniteScrollComplete');
+
+
+
+  $scope.loadMore = function() {
+    
+    console.log('Load more ....');
+
+        console.log(initial_page);
+
+    RottenAPI.getMovies($scope.type, initial_page).
+      success( function(data) {
+        $ionicLoading.hide();
+        console.log("I am data movies", data.movies);
+        initial_page += 1;
+        console.log(initial_page);
+                      $scope.$broadcast('scroll.infiniteScrollComplete');
+
+        //$scope.movies = data.movies;
+        $scope.movies = $scope.movies.concat(data.movies);
+        console.log($scope.movies);
+
+
+      });    
+  }
 })
 
 .controller('UpcomingCtrl', function($scope, $stateParams, RottenAPI) {
