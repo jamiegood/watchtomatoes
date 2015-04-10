@@ -133,30 +133,47 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.movies = [];
 
   var initial_page = 1;
+  var page_size = 1;
+  $scope.scroller = true;
+
             $scope.$broadcast('scroll.infiniteScrollComplete');
 
 
 
   $scope.loadMore = function() {
     
+    if(page_size == $scope.movies.length) {
+      $scope.scroller = false;
+    }
     console.log('Load more ....');
 
         console.log(initial_page);
 
-    RottenAPI.getMovies($scope.type, initial_page).
-      success( function(data) {
-        $ionicLoading.hide();
-        console.log("I am data movies", data.movies);
-        initial_page += 1;
-        console.log(initial_page);
-                      $scope.$broadcast('scroll.infiniteScrollComplete');
-
-        //$scope.movies = data.movies;
-        $scope.movies = $scope.movies.concat(data.movies);
-        console.log($scope.movies);
+    if($scope.scroller) {
 
 
-      });    
+      RottenAPI.getMovies($scope.type, initial_page).
+        success( function(data) {
+          $ionicLoading.hide();
+          console.log("I am data movies", data.movies);
+          page_size = data.total;
+
+
+          initial_page += 1;
+          console.log(initial_page);
+                        $scope.$broadcast('scroll.infiniteScrollComplete');
+
+          //$scope.movies = data.movies;
+          $scope.movies = $scope.movies.concat(data.movies);
+          console.log($scope.movies);
+
+                  console.log(data.total);
+          console.log($scope.movies.length);
+
+
+
+        });   
+      } 
   }
 })
 
@@ -170,6 +187,7 @@ angular.module('starter.controllers', ['starter.services'])
 
   if(moviecache) {
       console.log("THis is the index: " + $stateParams.id);
+      console.log("This is moviecache: ", moviecache);
       $scope.movie = moviecache.movies[$stateParams.id];
 
       console.log($scope.movie);
@@ -296,7 +314,9 @@ angular.module('starter.controllers', ['starter.services'])
 
   if(moviecache) {
       console.log("THis is the index: " + $stateParams.id);
-      movie = moviecache.movies[$stateParams.id];
+      console.log("THis is the index: " + $stateParams.id);
+      console.log("This is moviecache: ", moviecache);      
+      movie = moviecache[$stateParams.id];
       movie.largeImage = config.largeImgURL + movie.posters.original.split('movie/')[1];
       $scope.movie = movie;
       console.log($scope.movie);

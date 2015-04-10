@@ -24,9 +24,13 @@
 					    // this callback will be called asynchronously
 					    // when the response is available
 					    if (movieCache[type]) {
-                movieCache[type] = movieCache[type].concat(data);
+                console.log('===========');
+                console.log(type);
+                console.log(movieCache[type]);
+                movieCache[type] = movieCache[type].concat(data.movies);
               } else {
-                movieCache[type] = data;                
+                console.log('++== Added to movietyope', data.movies);
+                movieCache[type] = data.movies;                
               }
 					   // console.log('yes', data);
 					  }).
