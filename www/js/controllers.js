@@ -85,21 +85,62 @@ angular.module('starter.controllers', ['starter.services'])
 
 .controller('OpeningsCtrl', function($scope, RottenAPI, $ionicLoading) {
 
-  $scope.movies = '';
   $scope.type = 'openings';
   $scope.menu = 'Openings';  
 
-  $ionicLoading.show({template: 'Loading...'});
+//
 
-  RottenAPI.getMovies($scope.type).
-    success( function(data) {
-      $ionicLoading.hide();
-      $scope.movies = data.movies;
-    });
+
+  $ionicLoading.show({template: 'Loading...'});
+  $scope.movies = [];
+
+  var initial_page = 1;
+  var page_size = 1;
+  $scope.scroller = true;
+
+  $scope.$broadcast('scroll.infiniteScrollComplete');
+
+
 
   $scope.loadMore = function() {
-    console.log('...load more...');
+    
+    if(page_size == $scope.movies.length) {
+      $scope.scroller = false;
+    }
+        
+      console.log('Load more ....');
+
+      console.log(initial_page);
+
+    if($scope.scroller) {
+
+
+      RottenAPI.getMovies($scope.type, initial_page).
+        success( function(data) {
+          $ionicLoading.hide();
+          console.log("I am data movies", data.movies);
+          page_size = data.total;
+
+
+          initial_page += 1;
+          console.log(initial_page);
+          $scope.$broadcast('scroll.infiniteScrollComplete');
+
+          //$scope.movies = data.movies;
+          $scope.movies = $scope.movies.concat(data.movies);
+          console.log($scope.movies);
+
+          console.log(data.total);
+          console.log($scope.movies.length);
+
+
+
+        });   
+      } 
   }
+
+
+
 })
 
 .controller('UpcomingsCtrl', function($scope, RottenAPI, $ionicLoading) {
@@ -160,21 +201,57 @@ angular.module('starter.controllers', ['starter.services'])
 
 .controller('InTheatersCtrl', function($scope, RottenAPI, $ionicLoading) {
 
-
-  $scope.movies = '';
   $scope.type = 'in_theaters';
   $scope.menu = 'Cinema';
 
+///
+
+
   $ionicLoading.show({template: 'Loading...'});
+  $scope.movies = [];
 
-  RottenAPI.getMovies($scope.type).
-    success( function(data) {
-      $ionicLoading.hide();
-      console.log(data.movies);
-      $scope.movies = data.movies;
-    });
+  var initial_page = 1;
+  var page_size = 1;
+  $scope.scroller = true;
+
+  $scope.loadMore = function() {
+    
+    if(page_size == $scope.movies.length) {
+      $scope.scroller = false;
+    }
+        
+      console.log('Load more ....');
+
+      console.log(initial_page);
+
+    if($scope.scroller) {
 
 
+      RottenAPI.getMovies($scope.type, initial_page).
+        success( function(data) {
+          $ionicLoading.hide();
+          console.log("I am data movies", data.movies);
+          page_size = data.total;
+
+
+          initial_page += 1;
+          console.log(initial_page);
+          $scope.$broadcast('scroll.infiniteScrollComplete');
+
+          //$scope.movies = data.movies;
+          $scope.movies = $scope.movies.concat(data.movies);
+          console.log($scope.movies);
+
+          console.log(data.total);
+          console.log($scope.movies.length);
+
+
+
+        });   
+       } 
+  }    
+
+///
 
 })
 .controller('SearchCtrl', function($scope, $stateParams, RottenAPI, $ionicLoading) {
