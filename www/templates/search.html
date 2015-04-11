@@ -10,7 +10,7 @@
 
 
     <ion-list>
-      <ion-item ng-repeat="movie in movies" class="item-thumbnail-left" href="#/app/detail/{{type}}/{{$index}}">
+      <ion-item ng-repeat="movie in movies track by $index" class="item-thumbnail-left" href="#/app/detail/{{type}}/{{$index}}">
 
           <img img-preload class="full-image fade" ng-src="{{movie.posters.thumbnail}}">
 

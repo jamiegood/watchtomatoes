@@ -51,7 +51,7 @@
 					  success(function(data, status, headers, config) {
 					    // this callback will be called asynchronously
 					    // when the response is available
-					    movieCache['search'] = data;
+					    movieCache['search'] = data.movies;
 					   // console.log('yes', data);
 					  }).
 					  error(function(data, status, headers, config) {

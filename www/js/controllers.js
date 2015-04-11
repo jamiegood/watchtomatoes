@@ -102,26 +102,6 @@ angular.module('starter.controllers', ['starter.services'])
   }
 })
 
-.controller('OpeningCtrl', function($scope, $stateParams, RottenAPI) {
-
-  $scope.type = 'openings';
-  $scope.menu = 'Openings';
-
-
-
-  var moviecache = RottenAPI.getCache(type);
-
-  if(moviecache) {
-      $scope.movie = moviecache.movies[$stateParams.id];
-  } else {
-    RottenAPI.getMovies($scope.type).
-      success( function(data) {
-        console.log('This is data movies: ' + data.movies);
-        $scope.movie = data.movies[$stateParams.id];
-      });
-  }
-
-})
 .controller('UpcomingsCtrl', function($scope, RottenAPI, $ionicLoading) {
 
   $scope.type = 'upcoming';
@@ -136,7 +116,7 @@ angular.module('starter.controllers', ['starter.services'])
   var page_size = 1;
   $scope.scroller = true;
 
-            $scope.$broadcast('scroll.infiniteScrollComplete');
+  $scope.$broadcast('scroll.infiniteScrollComplete');
 
 
 
@@ -145,9 +125,10 @@ angular.module('starter.controllers', ['starter.services'])
     if(page_size == $scope.movies.length) {
       $scope.scroller = false;
     }
-    console.log('Load more ....');
+        
+      console.log('Load more ....');
 
-        console.log(initial_page);
+      console.log(initial_page);
 
     if($scope.scroller) {
 
@@ -161,13 +142,13 @@ angular.module('starter.controllers', ['starter.services'])
 
           initial_page += 1;
           console.log(initial_page);
-                        $scope.$broadcast('scroll.infiniteScrollComplete');
+          $scope.$broadcast('scroll.infiniteScrollComplete');
 
           //$scope.movies = data.movies;
           $scope.movies = $scope.movies.concat(data.movies);
           console.log($scope.movies);
 
-                  console.log(data.total);
+          console.log(data.total);
           console.log($scope.movies.length);
 
 
@@ -175,30 +156,6 @@ angular.module('starter.controllers', ['starter.services'])
         });   
       } 
   }
-})
-
-.controller('UpcomingCtrl', function($scope, $stateParams, RottenAPI) {
-
-  var type = 'upcoming';
-  $scope.menu = 'Up Coming';
-
-  console.log(' THI IS NOT WORKING>>>>>>>>>In Upcoming    Ctrl');
-  var moviecache = RottenAPI.getCache(type);
-
-  if(moviecache) {
-      console.log("THis is the index: " + $stateParams.id);
-      console.log("This is moviecache: ", moviecache);
-      $scope.movie = moviecache.movies[$stateParams.id];
-
-      console.log($scope.movie);
-  } else {
-    RottenAPI.getMovies(type).
-      success( function(data) {
-        console.log('This is data movies: ' + data.movies);
-        $scope.movie = data.movies[$stateParams.id];
-      });
-  }
-
 })
 
 .controller('InTheatersCtrl', function($scope, RottenAPI, $ionicLoading) {
@@ -220,36 +177,16 @@ angular.module('starter.controllers', ['starter.services'])
 
 
 })
-
-.controller('InTheaterCtrl', function($scope, $stateParams, RottenAPI) {
-
-  var type = 'in_theaters';
-  console.log(' THI IS NOT WORKING>>>>>>>>>In in_theaters    Ctrl');
-  var moviecache = RottenAPI.getCache(type);
-
-  if(moviecache) {
-      console.log("THis is the index: " + $stateParams.id);
-      $scope.opening = moviecache.movies[$stateParams.id];
-
-      console.log($scope.movie);
-
-  } else {
-    RottenAPI.getMovies(type).
-      success( function(data) {
-        console.log('This is data movies: ' + data.movies);
-        $scope.movie = data.movies[$stateParams.id];
-      });
-  }
-
-})
 .controller('SearchCtrl', function($scope, $stateParams, RottenAPI, $ionicLoading) {
 
   $scope.type = 'search';
   console.log(' >>>>>>>>>In SearchCtrl Ctrl');
   //var moviecache = RottenAPI.getCache(type);
 
-  $scope.movies = '';
+  $scope.movies = [];
   $scope.searchtermX = '';
+
+//$scope.movies = $scope.movies.concat(data.movies);
 
   var doSearch = ionic.debounce(function(searchterm) {
     $ionicLoading.show({template: 'Loading...'});
@@ -263,25 +200,6 @@ angular.module('starter.controllers', ['starter.services'])
 
   $scope.search = function(searchtermX) {
     doSearch(searchtermX);
-  }
-
-})
-.controller('SearchOneCtrl', function($scope, $stateParams, RottenAPI) {
-
-  var type = 'search';
-  console.log(' THI IS NOT WORKING>>>>>>>>>In searchOne    Ctrl');
-  var moviecache = RottenAPI.getCache(type);
-  if(moviecache) {
-      console.log("THis is the index: " + $stateParams.openingId);
-      $scope.opening = moviecache.movies[$stateParams.openingId];
-
-      console.log($scope.opening);
-  } else {
-    RottenAPI.doSearch(type).
-      success( function(data) {
-        console.log('This is data movies: ' + data.movies);
-        $scope.opening = data.movies[$stateParams.openingId];
-      });
   }
 
 })
@@ -317,6 +235,7 @@ angular.module('starter.controllers', ['starter.services'])
       console.log("THis is the index: " + $stateParams.id);
       console.log("This is moviecache: ", moviecache);      
       movie = moviecache[$stateParams.id];
+      console.log('MOVIE CACHE: ', movie);
       movie.largeImage = config.largeImgURL + movie.posters.original.split('movie/')[1];
       $scope.movie = movie;
       console.log($scope.movie);
