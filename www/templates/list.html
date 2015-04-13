@@ -2,21 +2,14 @@
 
   <ion-content>
 
-    <ion-list show-delete="shouldShowDelete">
+    <ion-list show-delete="false">
       <ion-item ng-repeat="movie in movies track by $index" class="item-thumbnail-left" href="#/app/detail/{{type}}/{{$index}}">
 
           <img img-preload class="full-image fade" ng-src="{{movie.posters.thumbnail}}">
 
     
         {{movie.title}}
-				....{{$index}}...
-        {{movie.year}}
-        <ion-delete-button class="ion-minus-circled" ng-click=""></ion-delete-button>
-            
-        <ion-option-button class="button-assertive"
-                           ng-click="delete($index)">
-          Delete
-        </ion-option-button>        
+        {{movie.year}}   
 
       </ion-item>
     </ion-list>

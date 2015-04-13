@@ -29,7 +29,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives']
   in_theaters: 'lists/movies/in_theaters.json',
   search: 'movies.json',
   largeImgURL: 'http://content6.flixster.com/movie/',
-  localStorageKey: 'wanttowatch'
+  localStorageKey: 'wanttowatch',
+  prompt_duration: 1000
 })
 
 
