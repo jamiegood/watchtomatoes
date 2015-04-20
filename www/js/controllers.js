@@ -73,8 +73,6 @@ angular.module('starter.controllers', ['starter.services'])
 
   $scope.fbLogOut = function() {
 
-  //$scope.loginState = false;
-
     openFB.logout( function(){
       $window.location.reload();
 
@@ -87,9 +85,6 @@ angular.module('starter.controllers', ['starter.services'])
 
   $scope.type = 'openings';
   $scope.menu = 'Openings';  
-
-//
-
 
   $ionicLoading.show({template: 'Loading...'});
   $scope.movies = [];
@@ -219,51 +214,27 @@ angular.module('starter.controllers', ['starter.services'])
     if(page_size == $scope.movies.length) {
       $scope.scroller = false;
     }
-        
-      console.log('Load more ....');
-
-      console.log(initial_page);
 
     if($scope.scroller) {
-
 
       RottenAPI.getMovies($scope.type, initial_page).
         success( function(data) {
           $ionicLoading.hide();
-          console.log("I am data movies", data.movies);
           page_size = data.total;
-
-
           initial_page += 1;
-          console.log(initial_page);
           $scope.$broadcast('scroll.infiniteScrollComplete');
-
-          //$scope.movies = data.movies;
           $scope.movies = $scope.movies.concat(data.movies);
-          console.log($scope.movies);
-
-          console.log(data.total);
-          console.log($scope.movies.length);
-
-
 
         });   
        } 
   }    
 
-///
-
 })
 .controller('SearchCtrl', function($scope, $stateParams, RottenAPI, $ionicLoading) {
 
   $scope.type = 'search';
-  console.log(' >>>>>>>>>In SearchCtrl Ctrl');
-  //var moviecache = RottenAPI.getCache(type);
-
   $scope.movies = [];
   $scope.searchtermX = '';
-
-//$scope.movies = $scope.movies.concat(data.movies);
 
   var doSearch = ionic.debounce(function(searchterm) {
     $ionicLoading.show({template: 'Loading...'});
@@ -282,14 +253,8 @@ angular.module('starter.controllers', ['starter.services'])
 })
 .controller('ListCtrl', function($scope, $localstorage, $stateParams, RottenAPI) {
 
-  console.log(' >>>>>>>In list ctrl    Ctrl');
-
-  //get from local storage.
-  //var data = $localstorage.get('movie', 'default value');
-  // /$scope.openings = data.movies;
   $scope.menu = 'To Watch';
   $scope.movies = '';
-  console.log(' In in_theaters');
 
   RottenAPI.getMovies('in_theaters').
     success( function(data) {
@@ -302,49 +267,51 @@ angular.module('starter.controllers', ['starter.services'])
 .controller('DetailCtrl', function($scope, $localstorage, $stateParams, RottenAPI, config, WantToWatchService, $ionicLoading) {
 
   var type = $stateParams.type;
-  console.log(type);
   var movie = {};
-  console.log(' THI IS NOT WORKING>>>>>>>>>In Detail ctrl    Ctrl');
   var moviecache = RottenAPI.getCache(type);
 
   if(moviecache) {
-      console.log("THis is the index: " + $stateParams.id);
-      console.log("THis is the index: " + $stateParams.id);
-      console.log("This is moviecache: ", moviecache);      
       movie = moviecache[$stateParams.id];
-      console.log('MOVIE CACHE: ', movie);
       movie.largeImage = config.largeImgURL + movie.posters.original.split('movie/')[1];
       $scope.movie = movie;
-      console.log($scope.movie);
   } else {
     RottenAPI.getMovies(type).
       success( function(data) {
-        console.log('This is data movies: ' + data.movies);
         movie = data.movies[$stateParams.id];
         movie.largeImage = config.largeImgURL + movie.posters.original.split('movie/')[1];
-        //transform to a larger image
         $scope.movie = movie;
-        console.log($scope.movie);
       });
   }
 
   $scope.save = function(movie) {
-    console.log('I clicked on save %s', movie);
-    console.log(movie);
-    // add to WantToWatchService
-    console.log(movie);
-    console.log(config.localStorageKey);
+
     WantToWatchService.add(config.localStorageKey, movie);
     $ionicLoading.show({ template: 'Item saved!', noBackdrop: false, duration: config.prompt_duration });
 
   }  
 
   $scope.remove = function() {
-    console.log('I clicked on remove %s', id);
     $ionicLoading.show({ template: 'Item removed!', noBackdrop: true, duration: config.prompt_duration });
+  }
 
-    console.log($stateParams.id);
+  $scope.share = function(movie) {
     
+
+    
+    openFB.api({
+        method: 'POST',
+        path: '/me/feed',
+        params: {
+            message: "testing"
+        },
+        success: function () {
+          $ionicLoading.show({ template: 'Item shared!', noBackdrop: false, duration: config.prompt_duration });
+        },
+        error: function () {
+          $ionicLoading.show({ template: 'An error occurred while sharing this session on Facebook', noBackdrop: false, duration: config.prompt_duration });          
+        }
+    });
+
   }
 
 })
@@ -368,29 +335,22 @@ angular.module('starter.controllers', ['starter.services'])
 .controller('SaveDetailCtrl', function($scope, $localstorage, $stateParams, WantToWatchService, config, $location, $ionicLoading) {
 
   var id = $stateParams.id;
-  console.log(id);
   var movie = {};
-  console.log(' THI IS NOT WORKING>>>>>>>>>In Detail ctrl    Ctrl');
+
   $scope.movie = WantToWatchService.find(config.localStorageKey, id);
   $scope.index = $stateParams.id;
   console.log($scope.movie);
 
-   $scope.$watch($scope.movies, function() {
-         console.log('hey, myVar has changed!');
-         $scope.movies  = WantToWatchService.list(config.localStorageKey);   
-     });
+  $scope.$watch($scope.movies, function() {
+        $scope.movies  = WantToWatchService.list(config.localStorageKey);   
+  });
 
   $scope.remove = function() {
-    console.log('I clicked on remove %s', id);
-    console.log($stateParams.id);
     WantToWatchService.remove(config.localStorageKey, $scope.index);
-    //console.log
-      $scope.movies  = WantToWatchService.list(config.localStorageKey);   
-      $location.path('/app/wanttowatch'); 
-      $ionicLoading.show({ template: 'Item removed!', noBackdrop: true, duration: config.prompt_duration });
-
+    $scope.movies  = WantToWatchService.list(config.localStorageKey);   
+    $location.path('/app/wanttowatch'); 
+    $ionicLoading.show({ template: 'Item removed!', noBackdrop: true, duration: config.prompt_duration });
   }
-
 
 })
 
