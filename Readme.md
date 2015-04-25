@@ -1,8 +1,11 @@
-# watchtomatoes
+# Watch Tomatoes
 
+
+## Run 
+npm start
 
 ## Deploy
 	git push heroku master
 
-##
-[Here](https://guarded-basin-8577.herokuapp.com/)
+## Example
+[Here](http://guarded-basin-8577.herokuapp.com/)

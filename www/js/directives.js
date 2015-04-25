@@ -8,15 +8,13 @@ angular.module('starter.directives', ['starter.directives'])
       link: function(scope, element, attrs) {
         element.on('load', function() {
 
-          console.log('IMAGE LOADED - ADD CLASS IN');
           element.addClass('in');
         }).on('error', function() {
-          //
+          console.log('Opps!');
         });
 
         scope.$watch('ngSrc', function(newVal) {
           element.removeClass('in');
-                    console.log('IMAGE listed - REMOVE CLASS IN');
         });
       }
     };

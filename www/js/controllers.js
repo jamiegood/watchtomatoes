@@ -52,7 +52,6 @@ angular.module('starter.controllers', ['starter.services'])
   };
 
 
-
   $scope.fbLogin = function() {
 
   $scope.loginState = false;
@@ -95,46 +94,29 @@ angular.module('starter.controllers', ['starter.services'])
 
   $scope.$broadcast('scroll.infiniteScrollComplete');
 
-
-
   $scope.loadMore = function() {
     
     if(page_size == $scope.movies.length) {
       $scope.scroller = false;
     }
-        
-      console.log('Load more ....');
-
-      console.log(initial_page);
 
     if($scope.scroller) {
-
 
       RottenAPI.getMovies($scope.type, initial_page).
         success( function(data) {
           $ionicLoading.hide();
-          console.log("I am data movies", data.movies);
+
           page_size = data.total;
 
-
           initial_page += 1;
-          console.log(initial_page);
+
           $scope.$broadcast('scroll.infiniteScrollComplete');
 
-          //$scope.movies = data.movies;
           $scope.movies = $scope.movies.concat(data.movies);
-          console.log($scope.movies);
-
-          console.log(data.total);
-          console.log($scope.movies.length);
-
-
 
         });   
       } 
   }
-
-
 
 })
 
@@ -142,8 +124,6 @@ angular.module('starter.controllers', ['starter.services'])
 
   $scope.type = 'upcoming';
   $scope.menu = 'Up Coming';
-
-  console.log(' >>>>>>>>>In Upcomings    Ctrl');
 
   $ionicLoading.show({template: 'Loading...'});
   $scope.movies = [];
@@ -154,40 +134,24 @@ angular.module('starter.controllers', ['starter.services'])
 
   $scope.$broadcast('scroll.infiniteScrollComplete');
 
-
-
   $scope.loadMore = function() {
     
     if(page_size == $scope.movies.length) {
       $scope.scroller = false;
     }
-        
-      console.log('Load more ....');
-
-      console.log(initial_page);
 
     if($scope.scroller) {
-
 
       RottenAPI.getMovies($scope.type, initial_page).
         success( function(data) {
           $ionicLoading.hide();
-          console.log("I am data movies", data.movies);
           page_size = data.total;
 
-
           initial_page += 1;
-          console.log(initial_page);
+
           $scope.$broadcast('scroll.infiniteScrollComplete');
 
-          //$scope.movies = data.movies;
           $scope.movies = $scope.movies.concat(data.movies);
-          console.log($scope.movies);
-
-          console.log(data.total);
-          console.log($scope.movies.length);
-
-
 
         });   
       } 
@@ -198,9 +162,6 @@ angular.module('starter.controllers', ['starter.services'])
 
   $scope.type = 'in_theaters';
   $scope.menu = 'Cinema';
-
-///
-
 
   $ionicLoading.show({template: 'Loading...'});
   $scope.movies = [];
@@ -296,13 +257,11 @@ angular.module('starter.controllers', ['starter.services'])
 
   $scope.share = function(movie) {
     
-
-    
     openFB.api({
         method: 'POST',
         path: '/me/feed',
         params: {
-            message: "testing"
+            message: "I'd like to watch " + movie.title
         },
         success: function () {
           $ionicLoading.show({ template: 'Item shared!', noBackdrop: false, duration: config.prompt_duration });
