@@ -17,5 +17,8 @@
   },
   "cordovaPlugins": [
     "cordova-plugin-inappbrowser"
+  ],
+  "cordovaPlatforms": [
+    "ios"
   ]
 }
